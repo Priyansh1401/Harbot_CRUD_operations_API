@@ -29,6 +29,10 @@ client = TestClient(app)
 
 @pytest.fixture(scope="module", autouse=True)
 def setup_database():
+    # Drop all tables and recreate them
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+    
     db = TestingSessionLocal()
     hashed_password = get_password_hash("password")
     db_user = User(username="admin", hashed_password=hashed_password)
